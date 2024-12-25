@@ -58,7 +58,7 @@ class DateController with ChangeNotifier {
       selectedIndex: initialDate != null ? initialDate.day - 1 : null,
       numberOfDays: _getNumberOfDays(
         year: initialDate?.year ?? DateTime.now().year,
-        month: initialDate?.month ?? DateTime.now().month,
+        month: (initialDate != null) ? initialDate.month - 1 : DateTime.now().month - 1,
       ),
     );
 
@@ -230,7 +230,9 @@ class DateController with ChangeNotifier {
 
     _dayController = _dayController.copyWith(selectedIndex: selectedIndex, numberOfDays: numberOfDays);
 
-    notifyListeners();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      notifyListeners();
+    });
   }
 
   /// Called when the [initialDate] of the [ScrollWheelDatePicker] changed.
